@@ -1,142 +1,152 @@
 <template>
-  <v-container>
-    <v-layout
-      text-center
-      wrap
-    >
-      <v-flex xs12>
-        <v-img
-          :src="require('../assets/logo.svg')"
-          class="my-3"
-          contain
-          height="200"
-        ></v-img>
-      </v-flex>
+  <form @submit="formSubmit">
+    <div class="container">
+      <h1>Register</h1>
+      <p class= 'header'>Please fill in form to create an acount</p>
+      <hr>
 
-      <v-flex mb-4>
-        <h1 class="display-2 font-weight-bold mb-3">
-          Welcome to Vuetify
-        </h1>
-        <p class="subheading font-weight-regular">
-          For help and collaboration with other Vuetify developers,
-          <br>please join our online
-          <a href="https://community.vuetifyjs.com" target="_blank">Discord Community</a>
-        </p>
-      </v-flex>
+      <v-card  max-width="100%" class="mx-auto">
 
-      <v-flex
-        mb-5
-        xs12
-      >
-        <h2 class="headline font-weight-bold mb-3">What's next?</h2>
+        <label for = "email"><b>Email</b></label>
+        <input type = "text" placeholder="Enter Email" name = "email" v-model=" email" required/>
 
-        <v-layout justify-center>
-          <a
-            v-for="(next, i) in whatsNext"
-            :key="i"
-            :href="next.href"
-            class="subheading mx-3"
-            target="_blank"
-          >
-            {{ next.text }}
-          </a>
-        </v-layout>
-      </v-flex>
+        <label for = "name"><b>Name</b></label>
+        <input type = "text" placeholder="Enter Your Name" name = "name" v-model="name" required/>
 
-      <v-flex
-        xs12
-        mb-5
-      >
-        <h2 class="headline font-weight-bold mb-3">Important Links</h2>
+        <label for = "phone"><b>Phone Number</b></label>
+        <input type = "text" placeholder="Enter Your Phone Number" name = "phone" v-model="no_hp" required/>
 
-        <v-layout justify-center>
-          <a
-            v-for="(link, i) in importantLinks"
-            :key="i"
-            :href="link.href"
-            class="subheading mx-3"
-            target="_blank"
-          >
-            {{ link.text }}
-          </a>
-        </v-layout>
-      </v-flex>
+        <label for = "psw"><b>Password</b></label>
+        <input type="password" placeholder="Enter Password" name = "psw"  v-model="password" required/>
 
-      <v-flex
-        xs12
-        mb-5
-      >
-        <h2 class="headline font-weight-bold mb-3">Ecosystem</h2>
+        <label for ="psw-repeat"><b>Repeat Password </b></label>
+        <input type="password" placeholder="Repeat Password" name="psw-repeat" v-model="password_confirmation" required>
 
-        <v-layout justify-center>
-          <a
-            v-for="(eco, i) in ecosystem"
-            :key="i"
-            :href="eco.href"
-            class="subheading mx-3"
-            target="_blank"
-          >
-            {{ eco.text }}
-          </a>
-        </v-layout>
-      </v-flex>
-    </v-layout>
-  </v-container>
+      </v-card>
+
+      <hr>
+
+      <router-link to ="/login">Login</router-link>
+      <button type ="submit" class = "registerbtn">Register</button>
+
+
+    </div>
+
+    <div class="container signin">
+        <p>Already have an account? <a href="/login">Sign in</a>.</p>
+    </div>
+    <strong>Output:</strong>
+     <pre>{{output}}</pre>
+  </form>
 </template>
 
 <script>
 export default {
-  data: () => ({
-    ecosystem: [
-      {
-        text: 'vuetify-loader',
-        href: 'https://github.com/vuetifyjs/vuetify-loader',
-      },
-      {
-        text: 'github',
-        href: 'https://github.com/vuetifyjs/vuetify',
-      },
-      {
-        text: 'awesome-vuetify',
-        href: 'https://github.com/vuetifyjs/awesome-vuetify',
-      },
-    ],
-    importantLinks: [
-      {
-        text: 'Documentation',
-        href: 'https://vuetifyjs.com',
-      },
-      {
-        text: 'Chat',
-        href: 'https://community.vuetifyjs.com',
-      },
-      {
-        text: 'Made with Vuetify',
-        href: 'https://madewithvuejs.com/vuetify',
-      },
-      {
-        text: 'Twitter',
-        href: 'https://twitter.com/vuetifyjs',
-      },
-      {
-        text: 'Articles',
-        href: 'https://medium.com/vuetify',
-      },
-    ],
-    whatsNext: [
-      {
-        text: 'Explore components',
-        href: 'https://vuetifyjs.com/components/api-explorer',
-      },
-      {
-        text: 'Select a layout',
-        href: 'https://vuetifyjs.com/layout/pre-defined',
-      },
-      {
-        text: 'Frequently Asked Questions',
-        href: 'https://vuetifyjs.com/getting-started/frequently-asked-questions',
-      },
-    ],
-  }),
-};
+  mounted(){
+    console.log('Component mounted. ')
+  },
+  data(){
+    return{
+      email: '',
+      name: '',
+      no_hp: '',
+      password:'',
+      password_confirmation:'',
+      output:'',
+    }
+  },methods: {
+    formSubmit(e){
+      e.preventDefault();
+      let currentObject = this;
+      this.axios.post('http://192.168.43.238:3000/api/v1/register',{
+        email: this.email,
+        name: this.name,
+        no_hp: this.no_hp,
+        password: this.password,
+        password_confirmation: this.password_confirmation
+      })
+      .then(response => {
+        currentObject.output = response.data
+      })
+      .catch(error =>{
+        currentObject.output = error.data
+      })
+    }
+  }
+}
 </script>
+
+<style scoped lang="css">
+*{ box-sizing: border-box }
+
+.container{
+  padding: 16px
+}
+
+.mx-auto{
+  width: 100%;
+}
+
+.header{
+  width: 100%;
+  font-family: 'Roboto';
+  font-style: italic;
+}
+
+input[type = text], input[ type =  password]{
+  width: 100%;
+  padding: 10px;
+  margin: 5px 0 12px 0px;
+  font-family: 'Roboto';
+  font-style: italic;
+  font-size: 22px;
+}
+
+label{
+  width: 100%;
+  padding: 10px;
+  margin: 5px 0 12px 0px;
+  font-family: 'Roboto';
+  font-style: italic;
+}
+
+h1{
+  width: 100%;
+  font-family: 'Roboto';
+  
+  font-style: italic;
+}
+
+input[type = text]:focus , input[type = password]:focus{
+  background-color: #ddd;
+  outline: none;
+}
+
+hr{
+  border: 1px solid #f1f1f1;
+  margin-bottom: 20px
+}
+.registerbtn{
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  opacity: 0.9;
+}
+
+.registerbtn:hover{
+  opacity: 1;
+}
+
+a{
+  color: dodgerblue;
+}
+
+.signin{
+  background-color: #f1f1f1;
+  text-align: center;
+}
+</style>
