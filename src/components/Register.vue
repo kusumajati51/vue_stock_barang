@@ -55,7 +55,7 @@ export default {
       output:'',
     }
   },methods: {
-    formSubmit(e){
+      formSubmit(e){
       e.preventDefault();
       let currentObject = this;
       this.axios.post('http://192.168.43.238:3000/api/v1/register',{
@@ -106,14 +106,13 @@ label{
   width: 100%;
   padding: 10px;
   margin: 5px 0 12px 0px;
-  font-family: 'Roboto';
+  font-family: 'Roboto',serif;
   font-style: italic;
 }
 
 h1{
   width: 100%;
-  font-family: 'Roboto';
-  
+  font-family: 'Roboto',serif;
   font-style: italic;
 }
 
